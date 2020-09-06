@@ -1,12 +1,12 @@
 package io.woof.rlg;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import static io.woof.rlg.FxmlUtils.loadFxml;
 
 public class RlgApplication extends Application {
 
@@ -31,10 +31,4 @@ public class RlgApplication extends Application {
         scene.setRoot(loadFxml(fxmlName));
     }
 
-
-    static Parent loadFxml(String fxmlName) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                Thread.currentThread().getContextClassLoader().getResource("fxml/" + fxmlName + ".fxml"));
-        return fxmlLoader.load();
-    }
 }

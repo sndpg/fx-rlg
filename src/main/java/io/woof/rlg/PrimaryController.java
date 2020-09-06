@@ -5,6 +5,8 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
+import static io.woof.rlg.FxmlUtils.*;
+
 public class PrimaryController {
 
     @FXML
@@ -12,6 +14,6 @@ public class PrimaryController {
 
     @FXML
     private void openPreferences() throws IOException {
-        mainView.setCenter(RlgApplication.loadFxml("preferences"));
+        mainView.setCenter(loadFxml("preferences"));
     }
 }

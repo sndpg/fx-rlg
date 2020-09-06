@@ -32,5 +32,19 @@
                 </Menu>
             </MenuBar>
         </top>
+      <bottom>
+         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+           <buttons>
+             <Button mnemonicParsing="false" onAction="#test" text="Test" />
+           </buttons>
+         </ButtonBar>
+      </bottom>
+      <center>
+         <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+               <Label fx:id="label1" layoutX="286.0" layoutY="159.0" text="Label" />
+            </children>
+         </Pane>
+      </center>
     </BorderPane>
 </AnchorPane>

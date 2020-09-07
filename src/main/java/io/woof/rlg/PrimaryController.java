@@ -3,7 +3,7 @@ package io.woof.rlg;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -14,7 +14,7 @@ import static io.woof.rlg.FxmlUtils.loadFxml;
 public class PrimaryController {
 
     @FXML
-    private BorderPane mainView;
+    private Pane mainView;
 
     @FXML
     private Label label1;
@@ -31,6 +31,8 @@ public class PrimaryController {
 
     @FXML
     private void openPreferences() throws IOException {
-        mainView.setCenter(loadFxml("preferences"));
+        mainView.getChildren().clear();
+        mainView.getChildren().add(loadFxml("preferences"));
     }
+
 }

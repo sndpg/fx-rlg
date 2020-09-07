@@ -20,6 +20,8 @@ public class RlgApplication extends Application {
     public void start(Stage primaryStage) throws IOException {
         scene = new Scene(loadFxml("primary"));
         primaryStage.setScene(scene);
+        primaryStage.setTitle("RLG");
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

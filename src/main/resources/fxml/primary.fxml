@@ -58,8 +58,7 @@
                      </ButtonBar>
                      <ButtonBar minHeight="35.0" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS">
                         <buttons>
-                           <Button mnemonicParsing="false" onAction="#test" text="Test" />
-                           <Button mnemonicParsing="false" text="Start" />
+                           <Button fx:id="startStop" mnemonicParsing="false" onAction="#startStop" text="Start" />
                         </buttons>
                         <HBox.margin>
                            <Insets right="5.0" />

@@ -29,7 +29,7 @@ public class PrimaryController {
     @FXML
     private Button startStop;
 
-    private CompletableFutureCollection<Void> letterCountdown = new CompletableFutureCollection<>(2);
+    private final CompletableFutureCollection<Void> letterCountdown = new CompletableFutureCollection<>(2);
 
     @FXML
     private void startStop() {

@@ -22,8 +22,27 @@
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <!-- We have to build with jlink to create an executable image of the javafx application, but -->
+            <!-- commons-lang3 does not provide a module-info.-->
+            <!-- This dependency therefore points to an altered jar which contains an appropriate module.info (generated -->
+            <!-- by following instructions of -->
+            <!-- https://github.com/codetojoy/easter_eggs_for_java_9/tree/master/egg_21_JLink_With_Converted_Jar-->
+            <!-- maven now warns that this explicitly referenced jar file won't be resolvable by dependent projects-->
+            <!-- which doesn't matter though.-->
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.11</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/commons-lang.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -70,7 +89,8 @@
                         </goals>
                         <configuration>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>io.woof.rlg.ApplicationEntryPoint</mainClass>
                                 </transformer>
                             </transformers>

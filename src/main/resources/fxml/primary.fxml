@@ -50,48 +50,58 @@
                   </MenuBar>
               </top>
             <bottom>
-               <HBox alignment="CENTER" prefHeight="0.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <VBox prefHeight="8.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                   <children>
-                     <VBox>
+                     <Separator prefWidth="200.0" />
+                     <HBox alignment="CENTER">
                         <children>
-                           <Separator prefWidth="200.0" />
-                           <HBox alignment="CENTER" prefHeight="35.0" prefWidth="659.0">
-                              <children>
-                                 <ButtonBar nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
-                                   <buttons>
-                                       <Button mnemonicParsing="false" text="Reset" />
-                                   </buttons>
-                                    <HBox.margin>
-                                       <Insets bottom="5.0" left="5.0" top="5.0" />
-                                    </HBox.margin>
-                                 </ButtonBar>
-                                 <ButtonBar minHeight="35.0" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS">
-                                    <buttons>
-                                       <Button fx:id="startStop" mnemonicParsing="false" onAction="#startStop" text="Start" />
-                                    </buttons>
-                                    <HBox.margin>
-                                       <Insets bottom="5.0" right="5.0" top="5.0" />
-                                    </HBox.margin>
-                                 </ButtonBar>
-                              </children>
-                           </HBox>
+                           <ButtonBar nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
+                             <buttons>
+                                 <Button mnemonicParsing="false" text="Reset" />
+                             </buttons>
+                              <HBox.margin>
+                                 <Insets bottom="5.0" left="5.0" top="5.0" />
+                              </HBox.margin>
+                           </ButtonBar>
+                           <ButtonBar minHeight="35.0" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS">
+                              <buttons>
+                                 <Button fx:id="startStop" mnemonicParsing="false" onAction="#startStop" text="Start" />
+                              </buttons>
+                              <HBox.margin>
+                                 <Insets bottom="5.0" right="5.0" top="5.0" />
+                              </HBox.margin>
+                           </ButtonBar>
                         </children>
-                     </VBox>
+                     </HBox>
                   </children>
-               </HBox>
+               </VBox>
             </bottom>
             <center>
                <Pane BorderPane.alignment="CENTER">
                   <children>
-                     <FlowPane alignment="CENTER" columnHalignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="344.0" prefWidth="600.0">
+                     <VBox prefHeight="332.0" prefWidth="600.0">
                         <children>
-                           <Label fx:id="label1" alignment="CENTER" contentDisplay="CENTER" text="Label">
-                              <font>
-                                 <Font name="Consolas Bold" size="96.0" />
-                              </font>
-                           </Label>
+                           <FlowPane alignment="CENTER">
+                              <children>
+                                 <Label fx:id="mainLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="282.0" prefWidth="264.0" text="Label" textAlignment="CENTER">
+                                    <font>
+                                       <Font name="Consolas Bold" size="96.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </FlowPane>
+                           <Separator prefWidth="200.0" />
+                           <FlowPane alignment="CENTER">
+                              <children>
+                                 <Label fx:id="timerLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="600.0" text="Label" textAlignment="CENTER">
+                                    <font>
+                                       <Font name="Consolas" size="36.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </FlowPane>
                         </children>
-                     </FlowPane>
+                     </VBox>
                   </children>
                </Pane>
             </center>

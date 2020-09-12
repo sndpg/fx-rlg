@@ -47,7 +47,7 @@ public class PrimaryController {
                     }), CompletableFuture.delayedExecutor(4L, TimeUnit.SECONDS)));
         } else {
             startStop.setText(START);
-            if (letterCountdown != null && !letterCountdown.isDone()){
+            if (!letterCountdown.isDone()){
                 letterCountdown.cancelAll();
                 label1.setText("Hi!");
             }

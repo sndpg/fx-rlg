@@ -7,11 +7,15 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.woof.rlg.PrimaryController">
    <Pane fx:id="mainView">
@@ -46,31 +50,48 @@
                   </MenuBar>
               </top>
             <bottom>
-               <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+               <HBox alignment="CENTER" prefHeight="0.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                   <children>
-                     <ButtonBar nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
-                       <buttons>
-                           <Button mnemonicParsing="false" text="Reset" />
-                       </buttons>
-                        <HBox.margin>
-                           <Insets left="5.0" />
-                        </HBox.margin>
-                     </ButtonBar>
-                     <ButtonBar minHeight="35.0" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS">
-                        <buttons>
-                           <Button fx:id="startStop" mnemonicParsing="false" onAction="#startStop" text="Start" />
-                        </buttons>
-                        <HBox.margin>
-                           <Insets right="5.0" />
-                        </HBox.margin>
-                     </ButtonBar>
+                     <VBox>
+                        <children>
+                           <Separator prefWidth="200.0" />
+                           <HBox alignment="CENTER" prefHeight="35.0" prefWidth="659.0">
+                              <children>
+                                 <ButtonBar nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
+                                   <buttons>
+                                       <Button mnemonicParsing="false" text="Reset" />
+                                   </buttons>
+                                    <HBox.margin>
+                                       <Insets bottom="5.0" left="5.0" top="5.0" />
+                                    </HBox.margin>
+                                 </ButtonBar>
+                                 <ButtonBar minHeight="35.0" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS">
+                                    <buttons>
+                                       <Button fx:id="startStop" mnemonicParsing="false" onAction="#startStop" text="Start" />
+                                    </buttons>
+                                    <HBox.margin>
+                                       <Insets bottom="5.0" right="5.0" top="5.0" />
+                                    </HBox.margin>
+                                 </ButtonBar>
+                              </children>
+                           </HBox>
+                        </children>
+                     </VBox>
                   </children>
                </HBox>
             </bottom>
             <center>
-               <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <Pane BorderPane.alignment="CENTER">
                   <children>
-                     <Label fx:id="label1" layoutX="286.0" layoutY="159.0" text="Label" />
+                     <FlowPane alignment="CENTER" columnHalignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="344.0" prefWidth="600.0">
+                        <children>
+                           <Label fx:id="label1" alignment="CENTER" contentDisplay="CENTER" text="Label">
+                              <font>
+                                 <Font name="Consolas Bold" size="96.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </FlowPane>
                   </children>
                </Pane>
             </center>

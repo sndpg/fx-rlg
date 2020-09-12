@@ -57,7 +57,7 @@
                         <children>
                            <ButtonBar nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
                              <buttons>
-                                 <Button mnemonicParsing="false" text="Reset" />
+                                 <Button mnemonicParsing="false" onAction="#resetModel" text="Reset" />
                              </buttons>
                               <HBox.margin>
                                  <Insets bottom="5.0" left="5.0" top="5.0" />

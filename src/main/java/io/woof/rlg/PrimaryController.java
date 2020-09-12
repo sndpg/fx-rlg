@@ -1,6 +1,7 @@
 package io.woof.rlg;
 
 import io.woof.rlg.concurrent.CompletableFutureCollection;
+import io.woof.rlg.model.ModelContextHolder;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,6 +25,9 @@ public class PrimaryController {
     private static final String START = "Start";
     private static final String STOP = "Stop";
 
+    private final CompletableFutureCollection<Void> mainLabelCountdown = new CompletableFutureCollection<>(2);
+    private final CompletableFutureCollection<Void> timeLabelCountdown = new CompletableFutureCollection<>();
+
     @FXML
     private Pane mainView;
 
@@ -35,10 +39,6 @@ public class PrimaryController {
 
     @FXML
     private Button startStop;
-
-    private final CompletableFutureCollection<Void> mainLabelCountdown = new CompletableFutureCollection<>(2);
-
-    private final CompletableFutureCollection<Void> timeLabelCountdown = new CompletableFutureCollection<>();
 
     @FXML
     public void initialize() {
@@ -59,16 +59,8 @@ public class PrimaryController {
 
             mainLabel.setText("Hi!");
             resetTimerLabel();
-            //            letterCountdown.add(
-            //                    CompletableFuture.runAsync(() -> Platform.runLater(() -> label1.setText("after 2
-            //                    sec.")),
-            //                            CompletableFuture.delayedExecutor(2L, TimeUnit.SECONDS)),
-            //                    CompletableFuture.runAsync(() -> Platform.runLater(() -> {
-            //                        label1.setText("after 4 sec.");
-            //                        startStop.setText(START);
-            //                    }), CompletableFuture.delayedExecutor(4L, TimeUnit.SECONDS)));
             startCountdown(mainLabelCountdown, mainLabel, Duration.ofSeconds(3L), "s", () -> {
-                mainLabel.setText("OI");
+                mainLabel.setText(ModelContextHolder.getModelContext().getLetterGenerator().next());
                 startCountdown(timeLabelCountdown, timerLabel, DEFAULT_TIMER_DURATION, "mm:ss",
                         () -> {
                             Media alarm = new Media(ClassLoader.getSystemResource("media/alarm1.mp3").toString());
@@ -78,20 +70,31 @@ public class PrimaryController {
                         });
             });
         } else {
-            startStop.setText(START);
-            if (!mainLabelCountdown.isDone() || !timeLabelCountdown.isDone()) {
-                mainLabelCountdown.cancelAll();
-                timeLabelCountdown.cancelAll();
-                mainLabel.setText("Hi!");
-                resetTimerLabel();
-            }
+            resetToStartState();
         }
+    }
+
+    @FXML
+    private void resetModel() {
+        ModelContextHolder.getModelContext().getLetterGenerator().reset();
+        resetToStartState();
+        initialize();
     }
 
     @FXML
     private void openPreferences() throws IOException {
         mainView.getChildren().clear();
         mainView.getChildren().add(loadFxml("preferences"));
+    }
+
+    private void resetToStartState() {
+        startStop.setText(START);
+        if (!mainLabelCountdown.isDone() || !timeLabelCountdown.isDone()) {
+            mainLabelCountdown.cancelAll();
+            timeLabelCountdown.cancelAll();
+            mainLabel.setText("Hi!");
+            resetTimerLabel();
+        }
     }
 
     private CompletableFutureCollection<Void> startCountdown(Label label, Duration from, String format,

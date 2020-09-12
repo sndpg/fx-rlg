@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
+        <lombok.version>1.18.12</lombok.version>
     </properties>
 
     <dependencies>
@@ -43,11 +44,6 @@
             <version>3.11</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/commons-lang.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
         </dependency>
     </dependencies>
 

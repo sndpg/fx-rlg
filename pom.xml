@@ -52,6 +52,11 @@
                     <source>14</source>
                     <target>14</target>
                     <mainClass>io.woof.rlg.RlgApplication</mainClass>
+                    <jlinkExecutable>C:\Program Files\AdoptOpenJDK\jdk-14.0.1.7-hotspot\bin\jlink</jlinkExecutable>
+                    <workingDirectory>.</workingDirectory>
+                    <jlinkImageName>fx-rlg</jlinkImageName>
+                    <jlinkZipName>fx-rlg</jlinkZipName>
+                    <launcher>rlg</launcher>
                 </configuration>
             </plugin>
             <plugin>

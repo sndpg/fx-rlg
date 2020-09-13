@@ -10,9 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -42,38 +40,52 @@ public class PreferencesController {
                 .map(Object::toString)
                 .collect(Collectors.toSet());
 
-        ObservableList<LetterProperty> letters = FXCollections.observableList(LetterGenerator.getDefaultCharacters()
-                .stream()
-                .map(character -> {
-                    String currentLetter = character.toString();
-                    return new LetterProperty(currentLetter, selectedCharacters.contains(currentLetter));
-                })
-                .collect(Collectors.toList()));
+        ObservableList<LetterProperty> letterProperties =
+                FXCollections.observableList(LetterGenerator.getDefaultCharacters()
+                        .stream()
+                        .map(character -> {
+                            String currentLetter = character.toString();
+                            return new LetterProperty(currentLetter, selectedCharacters.contains(currentLetter));
+                        })
+                        .collect(Collectors.toList()));
 
-        //        letters.addListener((ListChangeListener<LetterProperty>) c -> {
-        //            while (c.next()) {
-        //                String changedLetter = c.getList().get(c.getFrom()).getLetter();
-        //                if (letters.get(c.getFrom()).isSelected()) {
-        //                    selectedCharacters.add(changedLetter);
-        //                } else {
-        //                    selectedCharacters.remove(changedLetter);
-        //                }
-        //            }
-        //        });
-
-        lettersTable.setItems(letters);
+        lettersTable.setItems(letterProperties);
         lettersTable.setEditable(true);
 
         TableColumn<LetterProperty, String> charactersColumn = new TableColumn<>();
-        charactersColumn.setCellValueFactory(cellData -> cellData.getValue().letter);
+        charactersColumn.setCellValueFactory(cellData -> cellData.getValue().letterProperty());
 
-        TableColumn<LetterProperty, Boolean> column = new TableColumn<>();
-        column.setCellValueFactory(cellData -> cellData.getValue().selected);
-        column.setCellFactory(tableColumn -> {
+        CheckBox selectAllCheckBox = new CheckBox();
+        setSelectAllCheckBoxState(letterProperties, selectAllCheckBox);
+
+        selectAllCheckBox.setOnAction(
+                actionEvent -> {
+                    CheckBox target = (CheckBox) actionEvent.getTarget();
+                    letterProperties.forEach(letterProperty -> {
+                        boolean selected = target.isSelected();
+                        letterProperty.setSelected(selected);
+                        if (selected) {
+                            selectedCharacters.add(letterProperty.getLetter());
+                        } else {
+                            selectedCharacters.remove(letterProperty.getLetter());
+                        }
+                    });
+                });
+
+        ContextMenu lettersTableContextMenu = createLettersTableContextMenu(letterProperties, selectAllCheckBox);
+        charactersColumn.setContextMenu(lettersTableContextMenu);
+
+        TableColumn<LetterProperty, Boolean> checkBoxColumn = new TableColumn<>();
+
+        checkBoxColumn.setGraphic(selectAllCheckBox);
+        checkBoxColumn.setContextMenu(lettersTableContextMenu);
+        checkBoxColumn.setCellValueFactory(cellData -> cellData.getValue().selectedProperty());
+        checkBoxColumn.setCellFactory(tableColumn -> {
             CheckBoxTableCell<LetterProperty, Boolean> checkBoxTableCell = new CheckBoxTableCell<>();
             checkBoxTableCell.addEventHandler(ActionEvent.ACTION, actionEvent -> {
                 CheckBox target = (CheckBox) actionEvent.getTarget();
-                CheckBoxTableCell<LetterProperty, Boolean> cell = ((CheckBoxTableCell<LetterProperty, Boolean>) target.getParent());
+                CheckBoxTableCell<LetterProperty, Boolean> cell =
+                        ((CheckBoxTableCell<LetterProperty, Boolean>) target.getParent());
                 boolean isSelected = cell.isSelected();
                 String value = charactersColumn.getCellObservableValue(cell.getIndex()).getValue();
                 if (isSelected) {
@@ -81,39 +93,92 @@ public class PreferencesController {
                 } else {
                     selectedCharacters.remove(value);
                 }
+                setSelectAllCheckBoxState(letterProperties, selectAllCheckBox);
             });
-//            checkBoxTableCell.setSelectedStateCallback(i -> {
-//                Boolean value = tableColumn.getCellObservableValue(i).getValue();
-//                if (value) {
-//                    selectedCharacters.add(charactersColumn.getCellObservableValue(i).getValue());
-//                } else {
-//                    selectedCharacters.remove(charactersColumn.getCellObservableValue(i).getValue());
-//                }
-//                return new SimpleBooleanProperty(value);
-//            });
             return checkBoxTableCell;
         });
 
-        lettersTable.getColumns().add(column);
+        lettersTable.getColumns().add(checkBoxColumn);
         lettersTable.getColumns().add(charactersColumn);
     }
 
     @FXML
     private void closePreferences() throws IOException {
-        Pane parent = (Pane) mainAnchorPane.getParent();
+        var parent = (Pane) mainAnchorPane.getParent();
         parent.getChildren().clear();
         parent.getChildren().add(loadFxml("primary"));
     }
 
     @FXML
     private void applyPreferences() throws IOException {
-        Pane parent = (Pane) mainAnchorPane.getParent();
+        var parent = (Pane) mainAnchorPane.getParent();
         ModelContextHolder.getModelContext().setLetterGenerator(new LetterGenerator(
                 selectedCharacters.stream()
                         .map(s -> s.charAt(0))
                         .collect(Collectors.toSet())));
         parent.getChildren().clear();
         parent.getChildren().add(loadFxml("primary"));
+    }
+
+    private ContextMenu createLettersTableContextMenu(ObservableList<LetterProperty> letterProperties,
+            CheckBox selectAllCheckBox) {
+        var contextMenu = new ContextMenu();
+
+        var selectAll = new MenuItem();
+        selectAll.setText("select all");
+        selectAll.addEventHandler(ActionEvent.ACTION,
+                event -> {
+                    letterProperties.forEach(letterProperty -> {
+                        letterProperty.setSelected(true);
+                        selectedCharacters.add(letterProperty.getLetter());
+                    });
+                    setSelectAllCheckBoxState(letterProperties, selectAllCheckBox);
+                });
+
+        var deselectAll = new MenuItem();
+        deselectAll.setText("deselect all");
+        deselectAll.addEventHandler(ActionEvent.ACTION,
+                event -> {
+                    letterProperties.forEach(letterProperty -> {
+                        letterProperty.setSelected(false);
+                        selectedCharacters.remove(letterProperty.getLetter());
+                    });
+                    setSelectAllCheckBoxState(letterProperties, selectAllCheckBox);
+                });
+
+        var invert = new MenuItem();
+        invert.setText("invert");
+        invert.addEventHandler(ActionEvent.ACTION, event -> {
+            letterProperties.forEach(
+                    letterProperty -> {
+                        boolean newSelectedState = !letterProperty.isSelected();
+                        letterProperty.setSelected(newSelectedState);
+                        if (newSelectedState) {
+                            selectedCharacters.add(letterProperty.getLetter());
+                        } else {
+                            selectedCharacters.remove(letterProperty.getLetter());
+                        }
+                    });
+            setSelectAllCheckBoxState(letterProperties, selectAllCheckBox);
+        });
+
+        var menuItems = contextMenu.getItems();
+        menuItems.add(selectAll);
+        menuItems.add(deselectAll);
+        menuItems.add(new SeparatorMenuItem());
+        menuItems.add(invert);
+
+        return contextMenu;
+    }
+
+    private void setSelectAllCheckBoxState(ObservableList<LetterProperty> letterProperties, CheckBox checkBox) {
+        if (letterProperties.stream().allMatch(LetterProperty::isSelected)) {
+            checkBox.setSelected(true);
+        } else if (letterProperties.stream().noneMatch(LetterProperty::isSelected)) {
+            checkBox.setSelected(false);
+        } else {
+            checkBox.setIndeterminate(true);
+        }
     }
 
     private static class LetterProperty {

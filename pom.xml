@@ -69,7 +69,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <executable>C:/Program Files/AdoptOpenJDK/jdk-14.0.1.7-hotspot/bin/java</executable>
+                    <executable>C:\Program Files\AdoptOpenJDK\jdk-14.0.1.7-hotspot\bin\java</executable>
                     <release>14</release>
                     <source>14</source>
                     <target>14</target>

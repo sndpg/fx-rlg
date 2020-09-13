@@ -1,11 +1,11 @@
 package io.woof.rlg;
 
+import io.vavr.control.Try;
 import io.woof.rlg.concurrent.CompletableFutureCollection;
 import io.woof.rlg.model.ModelContextHolder;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -41,13 +41,21 @@ public class PrimaryController {
     private Button startStop;
 
     @FXML
+    private TextField timerMinutes;
+
+    @FXML
+    private TextField timerSeconds;
+
+    @FXML
     public void initialize() {
+        timerMinutes.setTextFormatter(createTimerTextFormatter(60, "minutes"));
+        timerSeconds.setTextFormatter(createTimerTextFormatter(59, "seconds"));
+
+        timerMinutes.setText(String.valueOf(DEFAULT_TIMER_DURATION.toMinutesPart()));
+        timerSeconds.setText(String.valueOf(DEFAULT_TIMER_DURATION.toSecondsPart()));
+
         mainLabel.setText("Hi!");
         resetTimerLabel();
-    }
-
-    private void resetTimerLabel() {
-        timerLabel.setText(DurationFormatUtils.formatDuration(DEFAULT_TIMER_DURATION.toMillis(), DEFAULT_TIMER_FORMAT));
     }
 
     @FXML
@@ -61,7 +69,7 @@ public class PrimaryController {
             resetTimerLabel();
             startCountdown(mainLabelCountdown, mainLabel, Duration.ofSeconds(3L), "s", () -> {
                 mainLabel.setText(ModelContextHolder.getModelContext().getLetterGenerator().next());
-                startCountdown(timeLabelCountdown, timerLabel, DEFAULT_TIMER_DURATION, "mm:ss",
+                startCountdown(timeLabelCountdown, timerLabel, getTimerInputAsDuration(), "mm:ss",
                         () -> {
                             Media alarm = new Media(ClassLoader.getSystemResource("media/alarm1.mp3").toString());
                             MediaPlayer mediaPlayer = new MediaPlayer(alarm);
@@ -119,6 +127,38 @@ public class PrimaryController {
                             CompletableFuture.delayedExecutor(totalSeconds - l, TimeUnit.SECONDS)));
         }
         return completableFutures;
+    }
+
+
+    private void resetTimerLabel() {
+        timerLabel.setText(
+                DurationFormatUtils.formatDuration(getTimerInputAsDuration().toMillis(), DEFAULT_TIMER_FORMAT));
+    }
+
+    private Duration getTimerInputAsDuration() {
+        return Duration.ofMinutes(Try.of(() -> Long.parseLong(timerMinutes.getText())).getOrElse(0L))
+                .plus(Duration.ofSeconds(Try.of(() -> Long.parseLong(timerSeconds.getText())).getOrElse(0L)));
+    }
+
+    private TextFormatter<TextFormatter.Change> createTimerTextFormatter(int maxValue,
+            String propertyNameForInvalidInput) {
+        return new TextFormatter<>(change -> {
+            if (change.isContentChange()) {
+                String controlNewText = change.getControlNewText();
+
+                // only digits allowed
+                boolean validInput = controlNewText.equals("") ||
+                        (controlNewText.matches("\\d+") && Integer.parseInt(controlNewText) <= maxValue);
+                if (!validInput) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setContentText(controlNewText + " is not a valid input for " + propertyNameForInvalidInput);
+                    alert.show();
+                    change.setText("");
+                }
+            }
+            resetTimerLabel();
+            return change;
+        });
     }
 
 }

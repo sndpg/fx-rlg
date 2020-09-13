@@ -1,124 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.input.KeyCodeCombination?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.woof.rlg.PrimaryController">
-   <Pane fx:id="mainView">
-      <children>
-          <BorderPane prefHeight="400.0" prefWidth="600.0">
-              <top>
-                  <MenuBar BorderPane.alignment="CENTER">
-                      <Menu text="File">
-                          <items>
-                              <MenuItem mnemonicParsing="false" onAction="#openPreferences" text="Preferences">
-                           <accelerator>
-                              <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP" shortcut="ANY" />
-                           </accelerator>
-                        </MenuItem>
-                          </items>
+<AnchorPane fx:id="mainView" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.woof.rlg.PrimaryController">
+    <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <top>
+            <MenuBar BorderPane.alignment="CENTER">
+                <Menu text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openPreferences" text="Preferences">
                      <accelerator>
-                        <KeyCodeCombination alt="ANY" code="F" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                        <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP" shortcut="ANY" />
                      </accelerator>
-                      </Menu>
-                      <Menu mnemonicParsing="false" text="Help">
-                          <items>
-                              <MenuItem mnemonicParsing="false" text="About">
-                           <accelerator>
-                              <KeyCodeCombination alt="UP" code="A" control="UP" meta="UP" shift="UP" shortcut="ANY" />
-                           </accelerator>
-                        </MenuItem>
-                          </items>
+                  </MenuItem>
+                    </items>
+               <accelerator>
+                  <KeyCodeCombination alt="ANY" code="F" control="UP" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About">
                      <accelerator>
-                        <KeyCodeCombination alt="ANY" code="H" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                        <KeyCodeCombination alt="UP" code="A" control="UP" meta="UP" shift="UP" shortcut="ANY" />
                      </accelerator>
-                      </Menu>
-                  </MenuBar>
-              </top>
-            <bottom>
-               <VBox prefHeight="8.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                  </MenuItem>
+                    </items>
+               <accelerator>
+                  <KeyCodeCombination alt="ANY" code="H" control="UP" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator>
+                </Menu>
+            </MenuBar>
+        </top>
+      <bottom>
+         <VBox prefHeight="8.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <children>
+               <Separator prefWidth="200.0" />
+               <HBox alignment="CENTER">
                   <children>
-                     <Separator prefWidth="200.0" />
-                     <HBox alignment="CENTER">
+                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                         <children>
-                           <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                              <children>
-                                 <Label text="Timer">
-                                    <HBox.margin>
-                                       <Insets left="5.0" right="5.0" />
-                                    </HBox.margin>
-                                 </Label>
-                                 <TextField fx:id="timerMinutes" alignment="CENTER" prefHeight="25.0" prefWidth="35.0" promptText="mm" text="2" />
-                                 <Label text=":">
-                                    <HBox.margin>
-                                       <Insets left="3.0" right="3.0" />
-                                    </HBox.margin>
-                                 </Label>
-                                 <TextField fx:id="timerSeconds" alignment="CENTER" prefHeight="25.0" prefWidth="35.0" promptText="ss" text="00" />
-                              </children>
+                           <Label text="Timer">
                               <HBox.margin>
-                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 <Insets left="5.0" right="5.0" />
                               </HBox.margin>
-                           </HBox>
-                           <ButtonBar minHeight="35.0" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS">
-                              <buttons>
-                                 <Button mnemonicParsing="false" onAction="#resetModel" text="Reset" />
-                                 <Button fx:id="startStop" mnemonicParsing="false" onAction="#startStop" text="Start" />
-                              </buttons>
+                           </Label>
+                           <TextField fx:id="timerMinutes" alignment="CENTER" prefHeight="25.0" prefWidth="35.0" promptText="mm" text="2" />
+                           <Label text=":">
                               <HBox.margin>
-                                 <Insets bottom="5.0" right="5.0" top="5.0" />
+                                 <Insets left="3.0" right="3.0" />
                               </HBox.margin>
-                           </ButtonBar>
+                           </Label>
+                           <TextField fx:id="timerSeconds" alignment="CENTER" prefHeight="25.0" prefWidth="35.0" promptText="ss" text="00" />
                         </children>
+                        <HBox.margin>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </HBox.margin>
                      </HBox>
+                     <ButtonBar minHeight="35.0" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="ALWAYS">
+                        <buttons>
+                           <Button mnemonicParsing="false" onAction="#resetModel" text="Reset" />
+                           <Button fx:id="startStop" mnemonicParsing="false" onAction="#startStop" text="Start" />
+                        </buttons>
+                        <HBox.margin>
+                           <Insets bottom="5.0" right="5.0" top="5.0" />
+                        </HBox.margin>
+                     </ButtonBar>
+                  </children>
+               </HBox>
+            </children>
+         </VBox>
+      </bottom>
+      <center>
+         <Pane BorderPane.alignment="CENTER">
+            <children>
+               <VBox prefHeight="332.0" prefWidth="600.0">
+                  <children>
+                     <FlowPane alignment="CENTER">
+                        <children>
+                           <Label fx:id="mainLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="282.0" prefWidth="264.0" text="Label" textAlignment="CENTER">
+                              <font>
+                                 <Font name="Consolas Bold" size="96.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </FlowPane>
+                     <Separator prefWidth="200.0" />
+                     <FlowPane alignment="CENTER">
+                        <children>
+                           <Label fx:id="timerLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="600.0" text="Label" textAlignment="CENTER">
+                              <font>
+                                 <Font name="Consolas" size="36.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </FlowPane>
                   </children>
                </VBox>
-            </bottom>
-            <center>
-               <Pane BorderPane.alignment="CENTER">
-                  <children>
-                     <VBox prefHeight="332.0" prefWidth="600.0">
-                        <children>
-                           <FlowPane alignment="CENTER">
-                              <children>
-                                 <Label fx:id="mainLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="282.0" prefWidth="264.0" text="Label" textAlignment="CENTER">
-                                    <font>
-                                       <Font name="Consolas Bold" size="96.0" />
-                                    </font>
-                                 </Label>
-                              </children>
-                           </FlowPane>
-                           <Separator prefWidth="200.0" />
-                           <FlowPane alignment="CENTER">
-                              <children>
-                                 <Label fx:id="timerLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="600.0" text="Label" textAlignment="CENTER">
-                                    <font>
-                                       <Font name="Consolas" size="36.0" />
-                                    </font>
-                                 </Label>
-                              </children>
-                           </FlowPane>
-                        </children>
-                     </VBox>
-                  </children>
-               </Pane>
-            </center>
-          </BorderPane>
-      </children>
-   </Pane>
+            </children>
+         </Pane>
+      </center>
+    </BorderPane>
 </AnchorPane>

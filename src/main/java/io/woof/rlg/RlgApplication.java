@@ -19,6 +19,8 @@ public class RlgApplication extends Application {
         Scene scene = new Scene(loadFxml("primary"));
         primaryStage.setScene(scene);
         primaryStage.setTitle("RLG");
+        primaryStage.setMinHeight(400);
+        primaryStage.setMinWidth(600);
         primaryStage.setResizable(false);
         primaryStage.show();
     }

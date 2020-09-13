@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 public class LetterGenerator {
 
-    private static final String DEFAULT_ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvxyz";
+    private static final String DEFAULT_ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyz";
 
     private final Set<Character> initialLetters = new HashSet<>();
     private final List<Character> remainingLetters = new ArrayList<>(26);
@@ -28,7 +28,7 @@ public class LetterGenerator {
                 .collect(Collectors.toSet());
     }
 
-    public Set<Character> getAllowedCharacters(){
+    public Set<Character> getAllowedCharacters() {
         return initialLetters;
     }
 
@@ -41,7 +41,7 @@ public class LetterGenerator {
         if (remainingLetters.isEmpty()) {
             reset();
         }
-        return remainingLetters.remove(new SecureRandom().nextInt(remainingLetters.size() - 1)).toString();
+        return remainingLetters.remove(new SecureRandom().nextInt(remainingLetters.size())).toString();
     }
 
     public Optional<String> nextOptional() {

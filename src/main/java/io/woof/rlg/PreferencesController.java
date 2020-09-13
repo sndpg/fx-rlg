@@ -7,9 +7,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -28,17 +29,18 @@ public class PreferencesController {
     private AnchorPane mainAnchorPane;
 
     @FXML
-    private AnchorPane letterSelectionAnchor;
+    private TableView<LetterProperty> lettersTable;
+
+    private Set<String> selectedCharacters;
 
     @FXML
     private void initialize() {
-        Set<String> selectedCharacters =
-                ModelContextHolder.getModelContext()
-                        .getLetterGenerator()
-                        .getAllowedCharacters()
-                        .stream()
-                        .map(Object::toString)
-                        .collect(Collectors.toSet());
+        selectedCharacters = ModelContextHolder.getModelContext()
+                .getLetterGenerator()
+                .getAllowedCharacters()
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.toSet());
 
         ObservableList<LetterProperty> letters = FXCollections.observableList(LetterGenerator.getDefaultCharacters()
                 .stream()
@@ -48,32 +50,52 @@ public class PreferencesController {
                 })
                 .collect(Collectors.toList()));
 
-        letters.addListener((ListChangeListener<LetterProperty>) c -> {
-            while (c.next()) {
-                String changedLetter = c.getList().get(c.getFrom()).getLetter();
-                if (letters.get(c.getFrom()).isSelected()) {
-                    selectedCharacters.add(changedLetter);
-                } else {
-                    selectedCharacters.remove(changedLetter);
-                }
-            }
-        });
+        //        letters.addListener((ListChangeListener<LetterProperty>) c -> {
+        //            while (c.next()) {
+        //                String changedLetter = c.getList().get(c.getFrom()).getLetter();
+        //                if (letters.get(c.getFrom()).isSelected()) {
+        //                    selectedCharacters.add(changedLetter);
+        //                } else {
+        //                    selectedCharacters.remove(changedLetter);
+        //                }
+        //            }
+        //        });
 
-        TableView<LetterProperty> tableView = new TableView<>();
-        tableView.setItems(letters);
-        tableView.setEditable(true);
+        lettersTable.setItems(letters);
+        lettersTable.setEditable(true);
 
         TableColumn<LetterProperty, String> charactersColumn = new TableColumn<>();
         charactersColumn.setCellValueFactory(cellData -> cellData.getValue().letter);
 
         TableColumn<LetterProperty, Boolean> column = new TableColumn<>();
         column.setCellValueFactory(cellData -> cellData.getValue().selected);
-        column.setCellFactory(tableColumn -> new CheckBoxTableCell<>());
+        column.setCellFactory(tableColumn -> {
+            CheckBoxTableCell<LetterProperty, Boolean> checkBoxTableCell = new CheckBoxTableCell<>();
+            checkBoxTableCell.addEventHandler(ActionEvent.ACTION, actionEvent -> {
+                CheckBox target = (CheckBox) actionEvent.getTarget();
+                CheckBoxTableCell<LetterProperty, Boolean> cell = ((CheckBoxTableCell<LetterProperty, Boolean>) target.getParent());
+                boolean isSelected = cell.isSelected();
+                String value = charactersColumn.getCellObservableValue(cell.getIndex()).getValue();
+                if (isSelected) {
+                    selectedCharacters.add(value);
+                } else {
+                    selectedCharacters.remove(value);
+                }
+            });
+//            checkBoxTableCell.setSelectedStateCallback(i -> {
+//                Boolean value = tableColumn.getCellObservableValue(i).getValue();
+//                if (value) {
+//                    selectedCharacters.add(charactersColumn.getCellObservableValue(i).getValue());
+//                } else {
+//                    selectedCharacters.remove(charactersColumn.getCellObservableValue(i).getValue());
+//                }
+//                return new SimpleBooleanProperty(value);
+//            });
+            return checkBoxTableCell;
+        });
 
-        tableView.getColumns().add(column);
-        tableView.getColumns().add(charactersColumn);
-
-        letterSelectionAnchor.getChildren().add(tableView);
+        lettersTable.getColumns().add(column);
+        lettersTable.getColumns().add(charactersColumn);
     }
 
     @FXML
@@ -86,13 +108,17 @@ public class PreferencesController {
     @FXML
     private void applyPreferences() throws IOException {
         Pane parent = (Pane) mainAnchorPane.getParent();
+        ModelContextHolder.getModelContext().setLetterGenerator(new LetterGenerator(
+                selectedCharacters.stream()
+                        .map(s -> s.charAt(0))
+                        .collect(Collectors.toSet())));
         parent.getChildren().clear();
         parent.getChildren().add(loadFxml("primary"));
     }
 
     private static class LetterProperty {
-        private StringProperty letter;
-        private BooleanProperty selected;
+        private final StringProperty letter;
+        private final BooleanProperty selected;
 
         public LetterProperty(String letter, boolean selected) {
             this.letter = new SimpleStringProperty(letter);

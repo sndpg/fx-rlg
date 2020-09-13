@@ -10,27 +10,17 @@ import static io.woof.rlg.FxmlUtils.loadFxml;
 
 public class RlgApplication extends Application {
 
-    private static Scene scene;
-
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        scene = new Scene(loadFxml("primary"));
+        Scene scene = new Scene(loadFxml("primary"));
         primaryStage.setScene(scene);
         primaryStage.setTitle("RLG");
         primaryStage.setResizable(false);
         primaryStage.show();
-    }
-
-    static Scene getScene(){
-        return scene;
-    }
-
-    static void setRoot(String fxmlName) throws IOException {
-        scene.setRoot(loadFxml(fxmlName));
     }
 
 }

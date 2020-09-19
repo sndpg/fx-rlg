@@ -12,12 +12,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static io.woof.rlg.FxmlUtils.loadFxml;
 
@@ -29,7 +33,12 @@ public class PreferencesController {
     @FXML
     private TableView<LetterProperty> lettersTable;
 
+    @FXML
+    private TextField excludedCharactersTextField;
+
     private Set<String> selectedCharacters;
+
+    private Set<String> previouslyRemoved = Collections.emptySet();
 
     @FXML
     private void initialize() {
@@ -48,6 +57,22 @@ public class PreferencesController {
                             return new LetterProperty(currentLetter, selectedCharacters.contains(currentLetter));
                         })
                         .collect(Collectors.toList()));
+
+        excludedCharactersTextField.addEventFilter(KeyEvent.KEY_TYPED, event -> {
+            char[] existingContent = excludedCharactersTextField.getText().toCharArray();
+            char[] alteredContent = Arrays.copyOf(existingContent, existingContent.length + 1);
+            alteredContent[alteredContent.length - 1] = event.getCharacter().charAt(0);
+
+            selectedCharacters.addAll(previouslyRemoved);
+            Set<String> lettersToExclude = IntStream.range(0, alteredContent.length)
+                    .mapToObj(i -> String.valueOf(alteredContent[i]).toUpperCase())
+                    .collect(Collectors.toSet());
+            selectedCharacters.removeAll(lettersToExclude);
+            previouslyRemoved = lettersToExclude;
+
+            letterProperties.forEach(letterProperty -> letterProperty.setSelected(
+                    selectedCharacters.contains(letterProperty.getLetter())));
+        });
 
         lettersTable.setItems(letterProperties);
         lettersTable.setEditable(true);

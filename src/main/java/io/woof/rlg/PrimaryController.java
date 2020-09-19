@@ -103,7 +103,6 @@ public class PrimaryController {
 
     private void revealNextLetterAndStartTimer(LetterGenerator letterGenerator) {
         startStop.setText(STOP);
-
         mainLabel.setText("Hi!");
         resetTimerLabel();
         startCountdown(mainLabelCountdown, mainLabel, Duration.ofSeconds(3L), "s", () -> {
@@ -126,7 +125,6 @@ public class PrimaryController {
     private CompletableFutureCollection<Void> startCountdown(CompletableFutureCollection<Void> completableFutures,
             Label label, Duration from, String format, Runnable finalizerOperation) {
         long totalSeconds = from.get(SECONDS);
-
         for (long l = totalSeconds; l >= 0; l--) {
             var currentSecond = l;
             completableFutures.add(
@@ -141,7 +139,6 @@ public class PrimaryController {
         }
         return completableFutures;
     }
-
 
     private void resetTimerLabel() {
         timerLabel.setText(

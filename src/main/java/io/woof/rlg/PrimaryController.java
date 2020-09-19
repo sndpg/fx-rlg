@@ -68,8 +68,8 @@ public class PrimaryController {
             if (!letterGenerator.hasNext()) {
                 var alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setContentText("All letters have been consumed. A new round will be started.");
-                alert.show();
                 alert.setOnCloseRequest(event -> revealNextAndStartTimer(letterGenerator));
+                alert.show();
                 return;
             }
             revealNextAndStartTimer(letterGenerator);

@@ -68,11 +68,11 @@ public class PrimaryController {
             if (!letterGenerator.hasNext()) {
                 var alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setContentText("All letters have been consumed. A new round will be started.");
-                alert.setOnCloseRequest(event -> revealNextAndStartTimer(letterGenerator));
+                alert.setOnCloseRequest(event -> revealNextLetterAndStartTimer(letterGenerator));
                 alert.show();
                 return;
             }
-            revealNextAndStartTimer(letterGenerator);
+            revealNextLetterAndStartTimer(letterGenerator);
         } else {
             resetToStartState();
         }
@@ -101,7 +101,7 @@ public class PrimaryController {
         }
     }
 
-    private void revealNextAndStartTimer(LetterGenerator letterGenerator) {
+    private void revealNextLetterAndStartTimer(LetterGenerator letterGenerator) {
         startStop.setText(STOP);
 
         mainLabel.setText("Hi!");

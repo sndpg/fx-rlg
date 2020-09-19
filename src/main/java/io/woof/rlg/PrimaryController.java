@@ -2,6 +2,7 @@ package io.woof.rlg;
 
 import io.vavr.control.Try;
 import io.woof.rlg.concurrent.CompletableFutureCollection;
+import io.woof.rlg.model.LetterGenerator;
 import io.woof.rlg.model.ModelContextHolder;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -63,20 +64,15 @@ public class PrimaryController {
         String text = startStop.getText();
 
         if (text.equalsIgnoreCase(START)) {
-            startStop.setText(STOP);
-
-            mainLabel.setText("Hi!");
-            resetTimerLabel();
-            startCountdown(mainLabelCountdown, mainLabel, Duration.ofSeconds(3L), "s", () -> {
-                mainLabel.setText(ModelContextHolder.getModelContext().getLetterGenerator().next());
-                startCountdown(timeLabelCountdown, timerLabel, getTimerInputAsDuration(), "mm:ss",
-                        () -> {
-                            Media alarm = new Media(ClassLoader.getSystemResource("media/alarm1.mp3").toString());
-                            MediaPlayer mediaPlayer = new MediaPlayer(alarm);
-                            mediaPlayer.play();
-                            startStop.setText(START);
-                        });
-            });
+            LetterGenerator letterGenerator = ModelContextHolder.getModelContext().getLetterGenerator();
+            if (!letterGenerator.hasNext()) {
+                var alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("All letters have been consumed. A new round will be started.");
+                alert.show();
+                alert.setOnCloseRequest(event -> revealNextAndStartTimer(letterGenerator));
+                return;
+            }
+            revealNextAndStartTimer(letterGenerator);
         } else {
             resetToStartState();
         }
@@ -103,6 +99,23 @@ public class PrimaryController {
             mainLabel.setText("Hi!");
             resetTimerLabel();
         }
+    }
+
+    private void revealNextAndStartTimer(LetterGenerator letterGenerator) {
+        startStop.setText(STOP);
+
+        mainLabel.setText("Hi!");
+        resetTimerLabel();
+        startCountdown(mainLabelCountdown, mainLabel, Duration.ofSeconds(3L), "s", () -> {
+            mainLabel.setText(letterGenerator.next());
+            startCountdown(timeLabelCountdown, timerLabel, getTimerInputAsDuration(), "mm:ss",
+                    () -> {
+                        Media alarm = new Media(ClassLoader.getSystemResource("media/alarm1.mp3").toString());
+                        MediaPlayer mediaPlayer = new MediaPlayer(alarm);
+                        mediaPlayer.play();
+                        startStop.setText(START);
+                    });
+        });
     }
 
     private CompletableFutureCollection<Void> startCountdown(Label label, Duration from, String format,
@@ -150,7 +163,7 @@ public class PrimaryController {
                 boolean validInput = controlNewText.equals("") ||
                         (controlNewText.matches("\\d+") && Integer.parseInt(controlNewText) <= maxValue);
                 if (!validInput) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    var alert = new Alert(Alert.AlertType.WARNING);
                     alert.setContentText(controlNewText + " is not a valid input for " + propertyNameForInvalidInput);
                     alert.show();
                     change.setText("");

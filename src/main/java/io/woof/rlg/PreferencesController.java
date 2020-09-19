@@ -51,11 +51,10 @@ public class PreferencesController {
 
         lettersTable.setItems(letterProperties);
         lettersTable.setEditable(true);
-
         TableColumn<LetterProperty, String> charactersColumn = new TableColumn<>();
         charactersColumn.setCellValueFactory(cellData -> cellData.getValue().letterProperty());
 
-        CheckBox selectAllCheckBox = new CheckBox();
+        var selectAllCheckBox = new CheckBox();
         setSelectAllCheckBoxState(letterProperties, selectAllCheckBox);
 
         selectAllCheckBox.setOnAction(
@@ -86,7 +85,7 @@ public class PreferencesController {
                 CheckBox target = (CheckBox) actionEvent.getTarget();
                 CheckBoxTableCell<LetterProperty, Boolean> cell =
                         ((CheckBoxTableCell<LetterProperty, Boolean>) target.getParent());
-                boolean isSelected = cell.isSelected();
+                boolean isSelected = target.isSelected();
                 String value = charactersColumn.getCellObservableValue(cell.getIndex()).getValue();
                 if (isSelected) {
                     selectedCharacters.add(value);
@@ -111,13 +110,19 @@ public class PreferencesController {
 
     @FXML
     private void applyPreferences() throws IOException {
-        var parent = (Pane) mainAnchorPane.getParent();
-        ModelContextHolder.getModelContext().setLetterGenerator(new LetterGenerator(
-                selectedCharacters.stream()
-                        .map(s -> s.charAt(0))
-                        .collect(Collectors.toSet())));
-        parent.getChildren().clear();
-        parent.getChildren().add(loadFxml("primary"));
+        if (selectedCharacters.isEmpty()) {
+            var alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("No letters have been chosen. Please select at least one letter.");
+            alert.show();
+        } else {
+            var parent = (Pane) mainAnchorPane.getParent();
+            ModelContextHolder.getModelContext().setLetterGenerator(new LetterGenerator(
+                    selectedCharacters.stream()
+                            .map(s -> s.charAt(0))
+                            .collect(Collectors.toSet())));
+            parent.getChildren().clear();
+            parent.getChildren().add(loadFxml("primary"));
+        }
     }
 
     private ContextMenu createLettersTableContextMenu(ObservableList<LetterProperty> letterProperties,

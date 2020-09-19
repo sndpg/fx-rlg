@@ -44,6 +44,10 @@ public class LetterGenerator {
         return remainingLetters.remove(new SecureRandom().nextInt(remainingLetters.size())).toString();
     }
 
+    public boolean hasNext(){
+        return !remainingLetters.isEmpty();
+    }
+
     public Optional<String> nextOptional() {
         return !remainingLetters.isEmpty() ? Optional.of(next()) : Optional.empty();
     }

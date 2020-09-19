@@ -7,6 +7,8 @@ import io.woof.rlg.model.ModelContextHolder;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -25,6 +27,10 @@ public class PrimaryController {
     private static final String DEFAULT_TIMER_FORMAT = "mm:ss";
     private static final String START = "Start";
     private static final String STOP = "Stop";
+
+    private static final Media ALARM_SOUND = new Media(ClassLoader.getSystemResource("media/alarm1.mp3").toString());
+    private static final Image TIMER_ICON =
+            new Image(ClassLoader.getSystemResource("media/baseline_alarm_black_36dp.png").toString());
 
     private final CompletableFutureCollection<Void> mainLabelCountdown = new CompletableFutureCollection<>(2);
     private final CompletableFutureCollection<Void> timeLabelCountdown = new CompletableFutureCollection<>();
@@ -48,7 +54,13 @@ public class PrimaryController {
     private TextField timerSeconds;
 
     @FXML
+    private Label timerIconLabel;
+
+    @FXML
     public void initialize() {
+        timerIconLabel.setText("");
+        timerIconLabel.setGraphic(new ImageView(TIMER_ICON));
+
         timerMinutes.setTextFormatter(createTimerTextFormatter(60, "minutes"));
         timerSeconds.setTextFormatter(createTimerTextFormatter(59, "seconds"));
 
@@ -109,8 +121,7 @@ public class PrimaryController {
             mainLabel.setText(letterGenerator.next());
             startCountdown(timeLabelCountdown, timerLabel, getTimerInputAsDuration(), "mm:ss",
                     () -> {
-                        Media alarm = new Media(ClassLoader.getSystemResource("media/alarm1.mp3").toString());
-                        MediaPlayer mediaPlayer = new MediaPlayer(alarm);
+                        MediaPlayer mediaPlayer = new MediaPlayer(ALARM_SOUND);
                         mediaPlayer.play();
                         startStop.setText(START);
                     });

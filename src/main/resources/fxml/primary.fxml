@@ -82,7 +82,7 @@
                   <children>
                      <FlowPane alignment="CENTER">
                         <children>
-                           <Label fx:id="mainLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="282.0" prefWidth="264.0" text="Label" textAlignment="CENTER">
+                           <Label fx:id="mainLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="278.0" prefWidth="264.0" text="Label" textAlignment="CENTER">
                               <font>
                                  <Font name="Consolas Bold" size="96.0" />
                               </font>
@@ -90,9 +90,17 @@
                         </children>
                      </FlowPane>
                      <Separator prefWidth="200.0" />
-                     <FlowPane alignment="CENTER">
+                     <FlowPane alignment="CENTER" orientation="VERTICAL">
                         <children>
-                           <Label fx:id="timerLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="600.0" text="Label" textAlignment="CENTER">
+                           <Label fx:id="timerIconLabel" text="IMG">
+                              <FlowPane.margin>
+                                 <Insets />
+                              </FlowPane.margin>
+                              <padding>
+                                 <Insets right="10.0" />
+                              </padding>
+                           </Label>
+                           <Label fx:id="timerLabel" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER">
                               <font>
                                  <Font name="Consolas" size="36.0" />
                               </font>
